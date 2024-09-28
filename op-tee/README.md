@@ -13,7 +13,7 @@
 $ mkdir optee
 $ cd optee
 # ここに`shell.nix`と`npins`のコピーを追加
-# nix-shell # ビルド用のシェル開始
+$ nix-shell # ビルド用のシェル開始
 $ repo init -u https://github.com/OP-TEE/manifest.git -m qemu_v8.xml
 $ repo sync
 $ cd build
