@@ -14,7 +14,7 @@ pkgs.mkShellNoCC {
         p.bc
         p.ccache
         p.file
-        p.gcc12Stdenv.cc # use older version of gcc to build keystone. gcc 14 did not work.
+        p.gcc12 # use older version of gcc to build keystone. gcc 14 did not work.
         p.gnumake
         p.libxcrypt-legacy
         p.makeself
