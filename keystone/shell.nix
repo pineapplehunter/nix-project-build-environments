@@ -10,22 +10,23 @@ pkgs.mkShellNoCC {
       pname = "make";
       version = "keystone";
       targetPkgs = p: [
-        p.bash
-        p.bc
-        p.ccache
         p.file
-        p.gcc12 # use older version of gcc to build keystone. gcc 14 did not work.
         p.gnumake
         p.libxcrypt-legacy
-        p.makeself
-        p.ncurses
-        p.openssh
-        p.perl
-        p.unzip
-        p.wget
-        p.which
       ];
       runScript = "make";
     })
+
+    pkgs.bc
+    pkgs.ccache
+    pkgs.gcc13 # use older version of gcc to build keystone. gcc 14 did not work.
+    pkgs.makeself
+    pkgs.ncurses
+    pkgs.openssh
+    pkgs.perl
+    pkgs.unzip
+    pkgs.wget
+    pkgs.which
   ];
+  env.NIX_HARDENING_ENABLE = "";
 }
