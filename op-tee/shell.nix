@@ -2,52 +2,61 @@ let
   npins = import ./npins;
   pkgs = import npins.nixpkgs { };
 in
-(pkgs.buildFHSEnv {
-  name = "optee-env";
-  targetPkgs =
-    tpkgs:
-    builtins.attrValues {
-      inherit (tpkgs)
-        git
-        git-repo
-        dtc
-        ccache
-        ninja
-        pkg-config
-        flex
-        bison
-        bc
-        pixman
-        which
-        file
-        wget
-        meson
-        cmake
-        curl
-        perl
-        cpio
-        unzip
-        rsync
-        flock
-        netcat
-        xterm
-        ;
-      openssl = tpkgs.openssl.dev;
-      glib = tpkgs.glib.dev;
-      libz = tpkgs.libz.dev;
-      python-env = tpkgs.python3.withPackages (
-        ps:
-        builtins.attrValues {
-          inherit (ps)
-            cryptography
-            pyelftools
-            ;
-        }
-      );
-      host-cc = tpkgs.stdenv.cc;
-    };
-  profile = ''
-    export NIX_SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
-    export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
-}).env
+pkgs.mkShellNoCC {
+  env.NIX_HARDENING_ENABLE = "";
+
+  packages = [
+    (pkgs.buildFHSEnv {
+      pname = "make";
+      version = "optee-wrapper";
+      targetPkgs = tpkgs: [
+        # tools
+        tpkgs.file
+        tpkgs.gcc
+        tpkgs.gnumake
+        tpkgs.pkg-config
+        tpkgs.which
+
+        # libs
+        tpkgs.glib.dev
+        tpkgs.gmp.dev
+        tpkgs.libmpc
+        tpkgs.libxcrypt
+        tpkgs.mpfr.dev
+        tpkgs.openssl
+        tpkgs.openssl.dev
+        tpkgs.pixman
+        tpkgs.zlib.dev
+      ];
+      runScript = "make";
+    })
+
+    pkgs.bc
+    pkgs.bison
+    pkgs.ccache
+    pkgs.cmake
+    pkgs.cpio
+    pkgs.curl
+    pkgs.dtc
+    pkgs.flex
+    pkgs.flock
+    pkgs.git
+    pkgs.git-repo
+    pkgs.meson
+    pkgs.ncurses
+    pkgs.netcat
+    pkgs.ninja
+    pkgs.perl
+    pkgs.rsync
+    pkgs.unzip
+    pkgs.wget
+
+    (pkgs.python3.withPackages (ps: [
+      ps.cryptography
+      ps.pyelftools
+    ]))
+
+    # terminal
+    pkgs.xterm
+  ];
+}
