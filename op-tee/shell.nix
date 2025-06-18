@@ -18,17 +18,21 @@ pkgs.mkShellNoCC {
         tpkgs.which
 
         # libs
-        tpkgs.glib.dev
-        tpkgs.gmp.dev
+        tpkgs.glib
+        tpkgs.gmp
+        tpkgs.gnutls
         tpkgs.libmpc
         tpkgs.libxcrypt
-        tpkgs.mpfr.dev
+        tpkgs.mpfr
         tpkgs.openssl
-        tpkgs.openssl.dev
         tpkgs.pixman
-        tpkgs.zlib.dev
+        tpkgs.zlib
       ];
       runScript = "make";
+      extraOutputsToInstall = [
+        "lib"
+        "dev"
+      ];
     })
 
     pkgs.bc
